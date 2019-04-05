@@ -8,7 +8,7 @@ WINNING_VAL = 100
 PH = 0.4
 
 
-def value_iteration(theta=1e-9):
+def value_iteration(theta=1e-10):
     """Returns optimal state-values and optimal policies after
     performing value iteration dynamic programming."""
     S = states(WINNING_VAL)

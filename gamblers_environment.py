@@ -22,5 +22,7 @@ def state_value_max(s, V, ph=0.4, argmax=False):
         returns.append(v)
         
     if argmax:
+        # Had to perform rounding for stable results. See
+        # https://github.com/ShangtongZhang/reinforcement-learning-an-introduction/issues/83
         return np.argmax(np.round(returns, 7)) + 1
     return np.max(returns)
