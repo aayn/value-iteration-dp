@@ -1,3 +1,5 @@
+import numpy as np
+
 
 def states(winning_value=100):
     "Gives all possible states in the Gambler's Problem."
@@ -6,35 +8,19 @@ def states(winning_value=100):
 
 def actions(s, winning_value=100):
     "Gives possible actions in the given state `s`."
-    return tuple(range(min(s, winning_value - s)))
+    return tuple(range(min(s, winning_value - s) + 1))
 
 
 def state_value_max(s, V, ph=0.4, argmax=False):
+    """Gives the return corresponding to best action if `argmax` is
+    False, else gives the best action."""
     A = actions(s)
-    max_v = 0
-    max_a = 0
-
-    for a in A:
-        next_states = p(s, a, ph)
-        v = [p * (r + V[s_]) for s_, (p, r) in next_states.items()]
-        if v > max_v:
-            max_v = v
-            if argmax:
-                max_a = a
-
+    returns = []
+    
+    for a in A[1:]:
+        v = ph * V[s + a] + (1 - ph) * V[s - a]
+        returns.append(v)
+        
     if argmax:
-        return max_a
-    return max_v
-
-
-def p(s, a, ph):
-    "Gives p(s', r| s, a)."
-    p_success = (ph, reward(s + a))
-    p_fail = (1 - ph, reward(s - a))
-    return {(s + a): p_success, (s - a): p_fail}
-
-
-def reward(s_, winning_value=100):
-    if s_ == winning_value:
-        return 1
-    return 0
+        return np.argmax(np.round(returns, 7)) + 1
+    return np.max(returns)
